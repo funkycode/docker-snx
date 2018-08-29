@@ -1,0 +1,23 @@
+FROM ubuntu:18.04
+
+RUN dpkg --add-architecture i386
+
+RUN apt update && apt install -y \
+        wget \
+        expect \
+        kmod \
+        libpam0g:i386 \
+        libx11-6:i386 \
+        libstdc++6:i386 \
+        libstdc++5:i386
+
+# 800008061 build
+RUN wget https://vpnportal.aktifbank.com.tr/SNX/INSTALL/snx_install.sh -O /tmp/snx_install.sh && \
+    chmod +x /tmp/snx_install.sh && \
+    /tmp/snx_install.sh
+
+COPY entrypoint.sh /
+
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
